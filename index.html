@@ -83,7 +83,7 @@
   </div>
   <canvas id="cv" width="960" height="540"></canvas>
   <div id="toast" class="hidden"></div>
-  <div id="ver">build v16</div>
+  <div id="ver">build v17</div>
 
   <!-- 首页 + 子页面 -->
   <div class="overlay" id="menu">
@@ -666,9 +666,12 @@ function genWave(){
   const nCore=2+Math.min(wave,4);
   let tries=0;
   const clearOfSub=(bx,fw)=>bx+fw<=SUB.x-56||bx>=SUB.x+56;   // 给艇身留出位置，但目标可以环绕四周
-  while(blocks.filter(b=>b.type==='core').length<nCore&&tries++<60){
-    const bx=480+Math.floor(Math.random()*10)*48;            // 480~912
+  while(blocks.filter(b=>b.type==='core').length<nCore&&tries++<80){
     const kind=Math.random();
+    const fw=kind<0.3?48:kind<0.55?40:kind<0.8?94:100;       // 结构总宽
+    const maxBx=W-8-fw;                                      // 关键：保证核心不会刷到画布外
+    const steps=Math.max(0,Math.floor((maxBx-480)/48));
+    const bx=480+Math.floor(Math.random()*(steps+1))*48;
     if(kind<0.3){          // 单柱塔
       if(!clearOfSub(bx,48))continue;
       const sup=Math.random()<0.5?'steel':'concrete';
